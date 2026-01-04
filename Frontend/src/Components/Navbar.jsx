@@ -1,13 +1,15 @@
 import Container from 'react-bootstrap/Container';
 import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
-import NavDropdown from 'react-bootstrap/NavDropdown';
+
+import { NavLink } from 'react-router-dom';
+
 import logo from "../assets/logo.png"
 const NavbarComponent = () => {
     return (
         <Navbar collapseOnSelect expand="lg" className="bg-body-tertiary">
             <Container>
-                <Navbar.Brand href="#home">
+                <Navbar.Brand as={NavLink} to='/'>
                     <img
                         alt="logo"
                         src={logo}
@@ -20,14 +22,14 @@ const NavbarComponent = () => {
                 <Navbar.Toggle aria-controls="responsive-navbar-nav" />
                 <Navbar.Collapse id="responsive-navbar-nav">
                     <Nav className="me-auto">
-                        <Nav.Link href="#features">Posts</Nav.Link>
-                        <Nav.Link href="#features">Followers</Nav.Link>
-                        <Nav.Link href="#pricing">Following</Nav.Link>
-                        <Nav.Link href="#pricing">Suggestions</Nav.Link>
+                        <Nav.Link as={NavLink} to="/feed">feed</Nav.Link>
+                        <Nav.Link >Followers</Nav.Link>
+                        <Nav.Link >Following</Nav.Link>
+                        {/* <Nav.Link href="#pricing">Suggestions</Nav.Link> */}
                     </Nav>
                     <Nav>
-                        <Nav.Link href="#deets">Sign up</Nav.Link>
-                        <Nav.Link href="#deets">Sign in</Nav.Link>
+                        <Nav.Link as={NavLink} to="/signup">Sign up</Nav.Link>
+                        <Nav.Link as={NavLink} to="/signin">Sign in</Nav.Link>
                     </Nav>
                 </Navbar.Collapse>
             </Container>

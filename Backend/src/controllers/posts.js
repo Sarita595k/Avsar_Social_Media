@@ -1,7 +1,8 @@
 import { Post } from "../model/post.js"
+
 export const getAllPost = async (req, res) => {
     try {
-        const posts = await Post.find()
+        const posts = await Post.find({}).populate('user')
         res.status(201).json({
             status: "Success",
             message: "Post fetched successfully",
@@ -18,8 +19,8 @@ export const getAllPost = async (req, res) => {
 export const createPost = async (req, res) => {
     try {
         const { imageUrl, caption } = req.body
-        const { _id } = req.user
-        await Post.create({ imageUrl, caption, user: _id })
+        const { id } = req.user
+        await Post.create({ imageUrl, caption, user: id })
         res.status(201).json({
             status: "Success",
             message: "Post created successfully"

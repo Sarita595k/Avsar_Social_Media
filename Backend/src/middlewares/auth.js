@@ -1,21 +1,24 @@
 import jwt from "jsonwebtoken"
 export const isLoggedIn = (req, res, next) => {
     try {
-        const { token } = req.headers
-        if (!token) {
+        const authHeader = req.headers.authorization;
+
+        if (!authHeader || !authHeader.startsWith("Bearer ")) {
             return res.status(401).json({
-                status: "Failed",
-                messgae: "Please sign in first"
-            })
+                status: "failed",
+                message: "Please sign in first"
+            });
         }
-        const user = jwt.verify(token, process.env.JWT_SECRET_KEY)
-        req.user = user
-        next()
+
+        const token = authHeader.split(" ")[1];
+
+        const decoded = jwt.verify(token, process.env.JWT_SECRET_KEY);
+        req.user = decoded; // { id: ... }
+        next();
     } catch (err) {
         res.status(401).json({
-            status: "Failed",
-            messgae: "Please sign in first",
-            error: err.messgae
-        })
+            status: "failed",
+            message: "Invalid or expired token"
+        });
     }
-}
+};
