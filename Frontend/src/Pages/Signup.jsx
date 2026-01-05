@@ -1,6 +1,9 @@
 import Form from 'react-bootstrap/Form';
 import { Button } from 'react-bootstrap';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { signUpUser } from '../store/userSlice';
+import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom'
 
 export const SignUp = () => {
     const [user, setUser] = useState({
@@ -8,12 +11,31 @@ export const SignUp = () => {
         email: "",
         password: ""
     })
+    const token = useSelector((store) => store.user.token)
 
-    const handleSubmit = () => {
-        console.log(user);
-    }
+    const dispatch = useDispatch()
+
+    const navigate = useNavigate()
+    useEffect(() => {
+        if (token) {
+            navigate('/feed')
+        }
+    }, [token])
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        if (!user.username || !user.email || !user.password) {
+            return;
+        }
+        dispatch(signUpUser(user));
+        setUser({
+            username: "",
+            email: "",
+            password: ""
+        })
+    };
+
     return (<>
-        <Form className='mx-auto'>
+        <Form className='mx-auto' onSubmit={handleSubmit}>
             <h1 className='display-5 mb-4'>Sign up</h1>
 
             <Form.Group className="mb-3" controlId="formBasicText">
@@ -32,7 +54,7 @@ export const SignUp = () => {
                 <Form.Label>Password</Form.Label>
                 <Form.Control type="password" placeholder="Password" value={user.password} onInput={(e) => setUser({ ...user, password: e.target.value })} />
             </Form.Group>
-            <Button variant="primary" type="submit" onClick={handleSubmit}>
+            <Button variant="primary" type="submit">
                 Sign up
             </Button>
         </Form>

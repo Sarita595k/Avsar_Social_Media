@@ -1,16 +1,36 @@
 import Form from 'react-bootstrap/Form';
 import { Button } from 'react-bootstrap';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { signInUser } from '../store/userSlice';
+import { useDispatch, useSelector } from 'react-redux';
 
 export const Signin = () => {
     const [user, setUser] = useState({
         email: "",
         password: ""
     })
+    const token = useSelector((store) => store.user.token)
+    const dispatch = useDispatch()
 
-    const handleSubmit = () => {
-        console.log(user);
-    }
+    const navigate = useNavigate()
+    useEffect(() => {
+        if (token) {
+            navigate('/feed')
+        }
+    }, [token])
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        if (!user.email || !user.password) {
+            return;
+        }
+        dispatch(signInUser(user));
+        setUser({
+            username: "",
+            email: "",
+            password: ""
+        })
+    };
     return (<>
         <Form className='mx-auto'>
             <h1 className='display-5 mb-4'>Sign in</h1>
