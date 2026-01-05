@@ -28,33 +28,51 @@ const userSlice = createSlice({
     initialState: {
         loading: false,
         token: null,
+        username: null,
         error: null,
+    },
+    reducers: {
+        clearError: (state) => {
+            state.error = null;
+        }
+    },
+    reducers: {
+        logout: (state) => {
+            state.token = null;
+            state.username = null
+        }
     },
     extraReducers: (builder) => {
         builder
             .addCase(signUpUser.pending, (state) => {
                 state.loading = true;
+                state.error = null
             })
             .addCase(signUpUser.fulfilled, (state, action) => {
                 state.loading = false;
                 state.token = action.payload.token;
+                state.username = action.payload.username;
             })
             .addCase(signUpUser.rejected, (state, action) => {
                 state.loading = false;
-                state.error = action.payload;
+                state.error = action.error.message;
             })
             .addCase(signInUser.pending, (state) => {
                 state.loading = true;
+                state.error = null;
             })
             .addCase(signInUser.fulfilled, (state, action) => {
                 state.loading = false;
                 state.token = action.payload.token;
+                state.username = action.payload.username;
             })
             .addCase(signInUser.rejected, (state, action) => {
                 state.loading = false;
-                state.error = action.payload;
+                state.error = action.error.message;
             });
+
     },
 });
+export const { clearError, logout } = userSlice.actions;
 
 export default userSlice.reducer;

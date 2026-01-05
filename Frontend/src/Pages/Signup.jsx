@@ -1,7 +1,7 @@
 import Form from 'react-bootstrap/Form';
 import { Button } from 'react-bootstrap';
 import { useEffect, useState } from 'react';
-import { signUpUser } from '../store/userSlice';
+import { clearError, signUpUser } from '../store/userSlice';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom'
 
@@ -11,16 +11,24 @@ export const SignUp = () => {
         email: "",
         password: ""
     })
-    const token = useSelector((store) => store.user.token)
+    const { token, error } = useSelector((store) => store.user)
 
     const dispatch = useDispatch()
-
     const navigate = useNavigate()
+
     useEffect(() => {
         if (token) {
             navigate('/feed')
         }
     }, [token])
+
+    useEffect(() => {
+        if (error) {
+            alert(error);
+            dispatch(clearError());
+        }
+    }, [error, dispatch]);
+
     const handleSubmit = (e) => {
         e.preventDefault();
         if (!user.username || !user.email || !user.password) {

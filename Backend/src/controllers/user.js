@@ -9,11 +9,12 @@ export const signupUser = async (req, res) => {
         const hashedPassword = await bcrypt.hash(password, 10)
         const user = await User.create({ username, email, password: hashedPassword })
 
-        const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET_KEY, { expiresIn: 60 * 30 })
+        const token = jwt.sign({ id: user._id, username: user.username }, process.env.JWT_SECRET_KEY, { expiresIn: 60 * 30 })
         res.status(201).json({
             status: "Success",
             message: "User created successfully",
-            token
+            token,
+            username: user.username
         })
     } catch (err) {
         res.status(400).json({
@@ -43,11 +44,12 @@ export const loginUser = async (req, res) => {
                 message: "Invalid password",
             })
         }
-        const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET_KEY, { expiresIn: 60 * 30 })
+        const token = jwt.sign({ id: user._id, username: user.username }, process.env.JWT_SECRET_KEY, { expiresIn: 60 * 30 })
         res.status(200).json({
             status: "success",
             message: "Login successfully",
-            token
+            token,
+            username: user.username
         })
 
     } catch (err) {
