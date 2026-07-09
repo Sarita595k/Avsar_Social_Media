@@ -1,6 +1,6 @@
 import express from "express";
 // import bodyParser, { urlencoded } from "body-parser";
-import mongoose from "mongoose";
+// import mongoose from "mongoose";
 import cors from 'cors'
 import dotenv from "dotenv"
 import { connectToDb } from "./config/config.js";
@@ -11,7 +11,7 @@ dotenv.config()
 
 const app = express()
 app.use(cors({
-    origin: 'http://localhost:5173'
+    origin: 'https://avsarsocialmedia.netlify.app'
 }))
 
 app.use(express.json())
